@@ -1,0 +1,179 @@
+Terminator = CR LF;
+ReadTimeout = 1000;
+WriteTimeout = 1000;
+PollPeriod = 100;
+ReplyTimeout = 10000;
+LockTimeout = 5000;
+ExtraInput = Ignore;
+	
+debug
+{
+	out "%s";
+	in "%39c";
+}
+
+getIdentity
+{
+	out "PTW";
+	in "%39c";
+}
+
+getSerial
+{
+	out "SER";
+	in "%39c";
+}
+
+getStatus
+{
+	out "S";
+	in "S%{RES|STA|HLD|INT|RUN|NUL|ERR}";
+}
+
+setStatus
+{
+	out "%{STA|INT|RES|HLD|NUL}";
+	in "%{STA|INT|RES|HLD|NUL}";
+	@init { getStatus; }
+}
+
+getCalibStatus
+{
+	out "SC";
+	in "SC%{0|1}";
+}
+
+getCorrStatus
+{
+	out "KS";
+	in "KS%{0|1}";
+}
+
+setCorrStatus
+{
+	out "KS%{0|1}";
+	in "KS%{0|1}";
+	@init { getCorrStatus; }
+}
+
+getCalibTmp
+{
+	out "KT";
+	in "KT%f";
+}
+
+setCalibTmp
+{
+	out "KT%f";
+	in "KT%f";
+	@init { getCalibTmp; }
+}
+
+getCalibPrs
+{
+	out "KP";
+	in "KP%f";
+}
+
+setCalibPrs
+{
+	out "KP%f";
+	in "KP%f";
+	@init { getCalibPrs; }
+}
+
+getDevStatus
+{
+	out "SD";
+	in "SD%d";
+}
+
+getDevErr
+{
+	out "SE";
+	in "SE%d";
+}
+
+getApp
+{
+	out "A";
+	in "A%{A|C|D|M|L}";
+}
+
+setApp
+{
+	out "A%{A|C|D|M|L}";
+	in "A%{A|C|D|M|L}";
+	@init { getApp; }
+}
+
+getIntervalTime
+{
+	out "I";
+	in "I%d";
+}
+
+setIntervalTime
+{
+	out "I%d";
+	in "I%d";
+	@init { getIntervalTime; }
+}
+
+getMeasMode
+{
+	out "M";
+	in "M%{0|1}";
+}
+
+setMeasMode
+{
+	out "M%{0|1}";
+	in "M%{0|1}";
+	@init { getMeasMode; }
+}
+
+getDataType
+{
+	out "Q";
+	in "Q%{0|1}";
+}
+
+setDataType
+{
+	out "Q%{0|1}";
+	in "Q%{0|1}";
+	@init { getDataType; }
+}
+
+getUnit
+{
+	out "U";
+	in "U%{A|S|M|H}";
+}
+
+setUnit
+{
+	out "U%{A|S|M|H}";
+	in "U%{A|S|M|H}";
+	@init { getUnit; }
+}
+
+getRange
+{
+	out "R";
+	in "R%{L|H}";
+}
+
+setRange
+{
+	out "R%{L|H}";
+	in "R%{L|H}";
+	@init { getRange; }
+}
+
+getMeasurements
+{
+	out "D0112";
+	in "%*20c%*29c%(\$1:IC01)e; %(\$1:IC02)e; %(\$1:IC03)e; %(\$1:IC04)e; %(\$1:IC05)e; %(\$1:IC06)e; %(\$1:IC07)e; %(\$1:IC08)e; %(\$1:IC09)e; %(\$1:IC10)e; %(\$1:IC11)e; %(\$1:IC12)e;%*5c";
+}

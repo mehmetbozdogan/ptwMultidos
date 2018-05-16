@@ -1,0 +1,505 @@
+# ptwMultidos.template
+# Template database for the PTW Multidos Beamloss Monitor
+# Mehmet Bozdogan 06/04/2018
+#
+# substitutions:
+# sys    - system
+# sec    - section
+# dev    - device
+# port   - $(sys):$(sec):$(dev) device port
+#
+#
+################################################################################
+record(stringout, "$(sys):$(sec):$(dev):Dbg")
+{
+	field(DESC, "$(dev) debug")
+	field(DTYP, "stream")
+	field(OUT,  "@ptwMultidos.proto debug $(sys):$(sec):$(dev)")
+}
+record(stringin, "$(sys):$(sec):$(dev):Idn")
+{
+	field(DESC, "$(dev) Identity")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getIdentity $(sys):$(sec):$(dev)")
+	field(PINI, "YES")
+	field(FLNK, "$(sys):$(sec):$(dev):Serial")
+}
+record(stringin, "$(sys):$(sec):$(dev):Serial")
+{
+	field(DESC, "$(dev) Serial Number")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getSerial $(sys):$(sec):$(dev)")
+}
+
+record(mbbi, "$(sys):$(sec):$(dev):Stat_RB")
+{
+	field(DESC, "$(dev) Status")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getStatus $(sys):$(sec):$(dev)")
+	field(SCAN, "1 second")
+	field(ZRVL, "0")
+	field(ZRST, "Stopped")
+	field(ONVL, "1")
+	field(ONST, "Measuring")
+	field(TWVL, "2")
+	field(TWST, "Hold")
+	field(THVL, "3")
+	field(THST, "Measuring Interval")
+	field(FRVL, "4")
+	field(FRST, "Running")
+	field(FVVL, "5")
+	field(FVST, "Zeroing")
+	field(SXVL, "6")
+	field(SXST, "Error")
+}
+
+record(mbbo, "$(sys):$(sec):$(dev):Stat_SP")
+{
+	field(DESC, "$(dev) Status Set")
+	field(DTYP, "stream")
+	field(OUT,  "@ptwMultidos.proto setStatus $(sys):$(sec):$(dev)")
+	field(ZRVL, "0")
+	field(ZRST, "Measure")
+	field(ONVL, "1")
+	field(ONST, "Measure Interval")
+	field(TWVL, "2")
+	field(TWST, "Stop")
+	field(THVL, "3")
+	field(THST, "Hold")
+	field(FRVL, "4")
+	field(FRST, "Zero")
+}
+
+record(bi, "$(sys):$(sec):$(dev):Calib_Stat")
+{
+	field(DESC, "$(dev) Calibration Status")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getCalibStatus $(sys):$(sec):$(dev)")
+	field(SCAN, "1 second")
+	field(ZNAM, "Uncalibrated")
+	field(ONAM, "All comp. are calibrated")
+}
+
+
+record(bi, "$(sys):$(sec):$(dev):Corr_Stat")
+{
+	field(DESC, "$(dev) Correction status")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getCorrStatus $(sys):$(sec):$(dev)")
+	field(SCAN, "5 second")
+	field(ZNAM, "Off")
+	field(ONAM, "On")
+}
+
+record(bo,"$(sys):$(sec):$(dev):Corr_Enbl")
+{
+	field(DESC, "$(dev) Correction Enable")
+	field(DTYP, "stream")
+	field(OUT,  "@ptwMultidos.proto setCorrStatus $(sys):$(sec):$(dev)")
+	field(ZNAM, "Off")
+	field(ONAM, "On")
+}
+
+
+record(ai, "$(sys):$(sec):$(dev):Calib_Tmp_RB")
+{
+	field(DESC, "$(dev) Calibration Tempereture Reacback")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getCalibTmp $(sys):$(sec):$(dev)")
+	field(SCAN, "5 second")
+	field(PREC, "2")
+	field(LOPR, "10")
+	field(HOPR, "40")
+	field(EGU, "C")
+}
+record(ao, "$(sys):$(sec):$(dev):Calib_Tmp_SP")
+{
+	field(DESC, "$(dev) Calibration Tempereture Setpoint")
+	field(DTYP, "stream")
+	field(OUT,  "@ptwMultidos.proto setCalibTmp $(sys):$(sec):$(dev)")
+	field(PREC, "2")
+	field(DRVL, "10")
+	field(DRVH, "40")
+	field(LOPR, "10")
+	field(HOPR, "40")
+	field(EGU, "C")
+}
+
+record(ai, "$(sys):$(sec):$(dev):Calib_Prs_RB")
+{
+	field(DESC, "$(dev) Calibration Pressure Reacback")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getCalibPrs $(sys):$(sec):$(dev)")
+	field(SCAN, "5 second")
+	field(PREC, "2")
+	field(LOPR, "500")
+	field(HOPR, "1300")
+	field(EGU, "hPa")
+}
+record(ao, "$(sys):$(sec):$(dev):Calib_Prs_SP")
+{
+	field(DESC, "$(dev) Calibration Tempereture Setpoint")
+	field(DTYP, "stream")
+	field(OUT,  "@ptwMultidos.proto setCalibPrs $(sys):$(sec):$(dev)")
+	field(PREC, "2")
+	field(DRVL, "500")
+	field(DRVH, "1300")
+	field(LOPR, "500")
+	field(HOPR, "1300")
+	field(EGU, "hPa")
+}
+
+record(mbbi, "$(sys):$(sec):$(dev):Dev_Stat")
+{
+	field(DESC, "$(dev) Device Status")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getDevStatus $(sys):$(sec):$(dev)")
+	field(SCAN, "5 second")
+	field(ZRVL, "0x00000000")
+	field(ZRST, "OK")
+	field(ONVL, "0x00000001")
+	field(ONST, "Command timeout")
+	field(TWVL, "0x00000010")
+	field(TWST, "Automode timeout")
+	field(THVL, "0x00000100")
+	field(THST, "Elec. calib. possible")
+	field(FRVL, "0x00001000")
+	field(FRST, "Dual channel protected")
+	field(FVVL, "0x00010000")
+	field(FVST, "Radio. unit is Roentgen")
+	field(SXVL, "0x00100000")
+	field(SXST, "Ref. temp. air dens. 22C")
+	field(SVVL, "0x01000000")
+	field(SVST, "HV Error")
+	field(EIVL, "0x10000000")
+	field(EIST, "ME 48 is conn to MULTIDOS")
+}
+
+record(mbbi, "$(sys):$(sec):$(dev):Err")
+{
+	field(DESC, "$(dev) Error")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getDevErr $(sys):$(sec):$(dev)")
+	field(SCAN, "5 second")
+	field(ZRVL, "0x00000000")
+	field(ZRST, "No Error")
+	field(ONVL, "0x00000001")
+	field(ONST, "Err calc of meas multip")
+	field(TWVL, "0x00000100")
+	field(TWST, "Err during data acq.")
+	field(THVL, "0x00010000")
+	field(THST, "EEPROM corr. (non crit)")
+	field(FRVL, "0x01000000")
+	field(FRST, "EEPROM error (crit)")
+}
+
+record(mbbi, "$(sys):$(sec):$(dev):App_RB")
+{
+	field(DESC, "$(dev) Application Readback")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getApp $(sys):$(sec):$(dev)")
+	field(SCAN, "5 second")
+	field(ZRVL, "0")
+	field(ZRST, "Afterloading")
+	field(ONVL, "1")
+	field(ONST, "Constancy Check")
+	field(TWVL, "2")
+	field(TWST, "Dual Dosemeter")
+	field(THVL, "3")
+	field(THST, "Multi Channel")
+	field(FRVL, "4")
+	field(FRST, "Linear Array")
+}
+
+record(mbbo, "$(sys):$(sec):$(dev):App_SP")
+{
+	field(DESC, "$(dev) Application SetPoint")
+	field(DTYP, "stream")
+	field(OUT,  "@ptwMultidos.proto setApp $(sys):$(sec):$(dev)")
+	field(SCAN, "5 second")
+	field(ZRVL, "0")
+	field(ZRST, "Afterloading")
+	field(ONVL, "1")
+	field(ONST, "Constancy Check")
+	field(TWVL, "2")
+	field(TWST, "Dual Dosemeter")
+	field(THVL, "3")
+	field(THST, "Multi Channel")
+	field(FRVL, "4")
+	field(FRST, "Linear Array")
+}
+
+record(longout, "$(sys):$(sec):$(dev):Interval_Time_SP")
+{
+	field(DESC, "$(dev) interval time setpoint")
+	field(DTYP, "stream")
+	field(OUT,  "@ptwMultidos.proto setIntervalTime $(sys):$(sec):$(dev)")
+	field(DRVL, "6")
+	field(DRVH, "9999")
+	field(LOPR, "6")
+	field(HOPR, "9999")
+	field(EGU, "s")
+}
+
+record(longin, "$(sys):$(sec):$(dev):Interval_Time_RB")
+{
+	field(DESC, "$(dev)  interval time readback")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getIntervalTime $(sys):$(sec):$(dev)")
+	field(SCAN, "5 second")
+	field(LOPR, "6")
+	field(HOPR, "9999")
+	field(EGU, "s")
+}
+
+record(bi, "$(sys):$(sec):$(dev):Meas_Mode_RB")
+{
+	field(DESC, "$(dev) Measuring Mode Readback")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getMeasMode $(sys):$(sec):$(dev)")
+	field(SCAN, "5 second")
+	field(ZNAM, "Dose/Charge")
+	field(ONAM, "Doserate/Current")
+}
+
+record(bo, "$(sys):$(sec):$(dev):Meas_Mode_SP")
+{
+	field(DESC, "$(dev) Measuring Mode Setpoint")
+	field(DTYP, "stream")
+	field(OUT,  "@ptwMultidos.proto setMeasMode $(sys):$(sec):$(dev)")
+	field(ZNAM, "Dose/Charge")
+	field(ONAM, "Doserate/Current")
+}
+
+#record(bi, "$(sys):$(sec):$(dev):Data_Type_RB")
+#{
+#	field(DESC, "$(dev) Data Type Readback")
+#	field(DTYP, "stream")
+#	field(INP,  "@ptwMultidos.proto getDataType $(sys):$(sec):$(dev)")
+#	field(SCAN, "5 second")
+#	field(ZNAM, "Absolute")
+#	field(ONAM, "Relative")
+#}
+#record(bo,"$(sys):$(sec):$(dev):Data_Type_SP")
+#{
+#	field(DESC, "$(dev)  Data Type Setpoint")
+#	field(DTYP, "stream")
+#	field(OUT,  "@ptwMultidos.proto setDataType $(sys):$(sec):$(dev)")
+#	field(ZNAM, "Absolute")
+#	field(ONAM, "Relative")
+#}
+
+record(mbbi, "$(sys):$(sec):$(dev):Unit_RB")
+{
+	field(DESC, "$(dev) Unit Readback")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getUnit $(sys):$(sec):$(dev)")
+	field(SCAN, "1 second")
+	field(ZRVL, "0")
+	field(ZRST, "A")
+	field(ONVL, "1")
+	field(ONST, "Gy/s")
+	field(TWVL, "2")
+	field(TWST, "Gy/min")
+	field(THVL, "3")
+	field(THST, "Gy/h")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL01")
+}
+
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL01")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC01.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL02")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL02")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC02.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL03")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL03")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC03.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL04")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL04")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC04.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL05")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL05")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC05.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL06")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL06")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC06.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL07")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL07")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC07.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL08")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL08")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC08.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL09")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL09")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC09.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL10")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL10")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC10.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL11")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL11")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC11.EGU NPP")
+	field(FLNK, "$(sys):$(sec):$(dev):Unit_CL12")
+}
+record(scalcout, "$(sys):$(sec):$(dev):Unit_CL12")
+{
+	field(DESC, "Unit RB ClosedLoob")
+	field(INAA, "$(sys):$(sec):$(dev):Unit_RB NPP")
+	field(CALC, "AA")
+    	field(OUT, "$(sys):$(sec):$(dev):IC12.EGU NPP")
+}
+
+record(mbbo, "$(sys):$(sec):$(dev):Unit_SP")
+{
+	field(DESC, "$(dev) Unit Setpoint")
+	field(DTYP, "stream")
+	field(OUT,  "@ptwMultidos.proto setUnit $(sys):$(sec):$(dev)")
+	field(ZRVL, "0")
+	field(ZRST, "A")
+	field(ONVL, "1")
+	field(ONST, "Gy/s")
+	field(TWVL, "2")
+	field(TWST, "Gy/min")
+	field(THVL, "3")
+	field(THST, "Gy/h")
+}
+
+record(bi, "$(sys):$(sec):$(dev):Meas_Rng_RB")
+{
+	field(DESC, "$(dev) Measuring Range Readback")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getUnit $(sys):$(sec):$(dev)")
+	field(SCAN, "5 second")
+	field(ZNAM, "Low")
+	field(ONAM, "High")
+}
+
+record(bo, "$(sys):$(sec):$(dev):Meas_Rng_SP")
+{
+	field(DESC, "$(dev) Measuring Range Setpoint")
+	field(DTYP, "stream")
+	field(OUT,  "@ptwMultidos.proto setUnit $(sys):$(sec):$(dev)")
+	field(ZNAM, "Low")
+	field(ONAM, "High")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC_Meas")
+{
+	field(DESC, "$(dev) Get All Measurements")
+	field(DTYP, "stream")
+	field(INP,  "@ptwMultidos.proto getMeasurements($(sys):$(sec):$(dev)) $(sys):$(sec):$(dev)")
+	field(SCAN, "1 second")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC01")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC02")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC03")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC04")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC05")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC06")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC07")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC08")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC09")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC10")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC11")
+{
+	field(PREC, "3")
+}
+
+record(ai, "$(sys):$(sec):$(dev):IC12")
+{
+	field(PREC, "3")
+}

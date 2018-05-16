@@ -1,0 +1,17 @@
+# ptwMultidos.substitutions
+# Template file for PTW Multidos Beamloss Monitor
+# Mehmet Bozdogan 27/04/2018
+#
+# substitutions:
+# sys	- system
+# sec	- section
+# dev	- device
+# $(sys)-$(sec)-$(dev) - device port(devPort)
+#
+#
+##############################################################################
+file ptwMultidos.template
+{
+	pattern { sys	sec	dev	}
+		{ TES	TEST	MD01	}
+}
